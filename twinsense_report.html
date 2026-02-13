@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TwinSense — WAICF 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FAFAF8;
+    --surface: #FFFFFF;
+    --text: #1A1A1A;
+    --text-secondary: #6B6B6B;
+    --accent: #E8652E;
+    --accent-soft: #FFF0E8;
+    --blue: #1B3B5C;
+    --blue-soft: #EDF3F8;
+    --green: #1B7A3D;
+    --green-soft: #E8F5EC;
+    --border: #E8E8E4;
+    --border-light: #F0F0EC;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15.5px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ====== HERO ====== */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    position: relative;
+    background: linear-gradient(165deg, #0D1B2A 0%, #1B3B5C 40%, #2A5A8C 100%);
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 600px 400px at 20% 80%, rgba(232,101,46,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 500px 500px at 80% 20%, rgba(255,255,255,0.04) 0%, transparent 60%);
+  }
+
+  /* Dot grid */
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 20%, transparent 80%);
+  }
+
+  .hero-content { position: relative; z-index: 1; max-width: 700px; }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 100px;
+    padding: 8px 20px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0.5px;
+    margin-bottom: 2.5rem;
+    backdrop-filter: blur(8px);
+  }
+
+  .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(3rem, 7vw, 5rem);
+    color: #fff;
+    line-height: 1.05;
+    margin-bottom: 1.2rem;
+    font-weight: 400;
+    letter-spacing: -1px;
+  }
+
+  .hero h1 span { color: var(--accent); }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.7;
+    max-width: 520px;
+    margin: 0 auto 3rem;
+    font-weight: 300;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+  }
+
+  .hero-meta span { display: flex; align-items: center; gap: 6px; }
+  .hero-meta svg { width: 14px; height: 14px; stroke: rgba(255,255,255,0.35); fill: none; stroke-width: 1.5; }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    animation: bob 2.5s ease-in-out infinite;
+  }
+
+  .scroll-hint svg { width: 20px; height: 20px; stroke: rgba(255,255,255,0.25); fill: none; stroke-width: 1.5; }
+
+  @keyframes bob { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
+
+  /* ====== LAYOUT ====== */
+  .container { max-width: 820px; margin: 0 auto; padding: 0 2rem; }
+
+  section { padding: 5rem 0; }
+
+  section + section { border-top: 1px solid var(--border); }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    color: var(--blue);
+    font-weight: 400;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 2.2rem 0 0.8rem;
+  }
+
+  p { margin-bottom: 1rem; color: var(--text-secondary); }
+
+  p strong { color: var(--text); font-weight: 600; }
+
+  /* ====== CARDS ====== */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin: 1.5rem 0;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+  }
+
+  .card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); transform: translateY(-2px); }
+
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    font-size: 18px;
+  }
+
+  .card-icon.blue { background: var(--blue-soft); }
+  .card-icon.orange { background: var(--accent-soft); }
+  .card-icon.green { background: var(--green-soft); }
+
+  .card h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--text); }
+  .card p { font-size: 0.88rem; margin: 0; color: var(--text-secondary); line-height: 1.6; }
+
+  /* ====== INFO TABLE ====== */
+  .info-table {
+    width: 100%;
+    margin: 1.5rem 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    font-size: 0.9rem;
+  }
+
+  .info-table th {
+    text-align: left;
+    padding: 10px 16px;
+    background: var(--blue);
+    color: #fff;
+    font-weight: 500;
+    font-size: 0.82rem;
+    letter-spacing: 0.3px;
+  }
+
+  .info-table td {
+    padding: 10px 16px;
+    border-top: 1px solid var(--border-light);
+    vertical-align: top;
+  }
+
+  .info-table tr:nth-child(even) td { background: #FAFAF8; }
+
+  .info-table td:first-child { font-weight: 600; color: var(--text); white-space: nowrap; width: 160px; }
+
+  /* ====== COMPARISON TABLE ====== */
+  .compare-table {
+    width: 100%;
+    margin: 1.5rem 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    font-size: 0.9rem;
+  }
+
+  .compare-table th {
+    padding: 12px 16px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-align: center;
+  }
+
+  .compare-table th:first-child { text-align: left; background: var(--blue); color: #fff; }
+  .compare-table th.old { background: #FDE8E8; color: #8B2020; }
+  .compare-table th.new { background: var(--green-soft); color: var(--green); }
+
+  .compare-table td {
+    padding: 10px 16px;
+    border-top: 1px solid var(--border-light);
+    text-align: center;
+  }
+
+  .compare-table td:first-child { text-align: left; font-weight: 500; color: var(--text); }
+  .compare-table tr:nth-child(even) td { background: #FAFAF8; }
+
+  /* ====== CALLOUT ====== */
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 1.2rem 1.5rem;
+    margin: 1.8rem 0;
+    font-size: 0.92rem;
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  .callout.blue {
+    border-left-color: var(--blue);
+    background: var(--blue-soft);
+  }
+
+  .callout.green {
+    border-left-color: var(--green);
+    background: var(--green-soft);
+  }
+
+  .callout strong { font-weight: 600; }
+
+  /* ====== STAT STRIP ====== */
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin: 2rem 0;
+  }
+
+  .stat {
+    background: var(--surface);
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    color: var(--blue);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+
+  .stat-value.accent { color: var(--accent); }
+  .stat-value.green { color: var(--green); }
+
+  .stat-label { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.4; }
+
+  /* ====== TIMELINE ====== */
+  .timeline { position: relative; margin: 2rem 0; padding-left: 2rem; }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 4px;
+    bottom: 4px;
+    width: 2px;
+    background: var(--border);
+  }
+
+  .timeline-item { position: relative; margin-bottom: 1.8rem; }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -2rem;
+    top: 6px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    background: var(--bg);
+  }
+
+  .timeline-item h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.3rem; }
+  .timeline-item p { font-size: 0.88rem; margin: 0; }
+
+  /* ====== INTERVIEW ====== */
+  .interview { margin: 1.5rem 0; }
+
+  .interview-block { margin-bottom: 1.2rem; }
+
+  .speaker {
+    font-weight: 600;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.3rem;
+  }
+
+  .speaker.adriano { color: var(--accent); }
+  .speaker.bs { color: var(--blue); }
+
+  .interview-block .quote {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.9rem 1.2rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .interview-block .quote.bs-quote {
+    border-left: 3px solid var(--blue);
+    background: var(--blue-soft);
+  }
+
+  .interview-divider {
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--border);
+    letter-spacing: 4px;
+    margin: 2rem 0;
+  }
+
+  /* ====== ECOSYSTEM FLOW ====== */
+  .eco-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+  }
+
+  .eco-node {
+    text-align: center;
+    padding: 1rem 1.2rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    min-width: 120px;
+  }
+
+  .eco-node .emoji { font-size: 1.4rem; margin-bottom: 0.3rem; }
+  .eco-node .name { font-weight: 600; font-size: 0.82rem; color: var(--text); }
+  .eco-node .role { font-size: 0.72rem; color: var(--text-secondary); margin-top: 2px; }
+
+  .eco-arrow {
+    font-size: 1.2rem;
+    color: var(--border);
+    padding: 0 0.3rem;
+    flex-shrink: 0;
+  }
+
+  /* ====== FOOTER ====== */
+  footer {
+    padding: 3rem 0;
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border);
+  }
+
+  footer a { color: var(--accent); text-decoration: none; }
+
+  /* ====== PRINT ====== */
+  @media print {
+    .hero { min-height: auto; padding: 3rem 2rem; break-after: page; }
+    section { padding: 2rem 0; }
+    .card:hover { box-shadow: none; transform: none; }
+    .scroll-hint { display: none; }
+  }
+
+  @media (max-width: 600px) {
+    .hero-meta { flex-direction: column; gap: 0.5rem; align-items: center; }
+    .eco-flow { flex-direction: column; }
+    .eco-arrow { transform: rotate(90deg); }
+    .info-table td:first-child { white-space: normal; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="hero-content">
+    <div class="hero-badge"><span class="dot"></span>WAICF 2026 — Cannes</div>
+    <h1>Twin<span>Sense</span></h1>
+    <p class="hero-sub">La vision neuromorphique au service de la robotique.<br>Des caméras intelligentes qui consomment 40× moins d'énergie.</p>
+    <div class="hero-meta">
+      <span>
+        <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Palais des Festivals, Cannes
+      </span>
+      <span>
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        13 février 2026
+      </span>
+      <span>
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Benjamin Schmitt, CTO
+      </span>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ EN BREF ============ -->
+<section>
+  <div class="container">
+    <div class="section-label">01 — Présentation</div>
+    <h2>TwinSense en bref</h2>
+
+    <div class="callout">
+      <strong>En une phrase :</strong> TwinSense développe des caméras intelligentes ultra-basse consommation inspirées de l'œil humain, pour permettre aux robots de « voir » en consommant 30 à 40 fois moins d'énergie.
+    </div>
+
+    <div class="stat-strip">
+      <div class="stat">
+        <div class="stat-value">3</div>
+        <div class="stat-label">Co-fondateurs<br>ingénieurs</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value accent">1W</div>
+        <div class="stat-label">Consommation<br>visée</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value green">4mm²</div>
+        <div class="stat-label">Taille de la puce<br>ASIC cible</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">25</div>
+        <div class="stat-label">Ans du CTO<br>au Japon</div>
+      </div>
+    </div>
+
+    <table class="info-table">
+      <tr><th colspan="2">Fiche d'identité</th></tr>
+      <tr><td>Nom</td><td>TwinSense Co., Ltd. (TwinSense 株式会社)</td></tr>
+      <tr><td>Création</td><td>Début 2024, Tokyo (Japon)</td></tr>
+      <tr><td>Équipe</td><td>3 co-fondateurs ingénieurs, dont Benjamin Schmitt (CTO, PhD & MBA, Français installé au Japon depuis 25 ans)</td></tr>
+      <tr><td>Stade</td><td>Phase de recherche et exploration — pas encore de produit commercial</td></tr>
+      <tr><td>Financement</td><td>Seed (~600K€). Difficulté de financement car le marché n'existe pas encore</td></tr>
+      <tr><td>Contact</td><td>bschmitt@twinsense.ai — twinsense.ai</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ ÉCOSYSTÈME ============ -->
+<section>
+  <div class="container">
+    <div class="section-label">02 — Écosystème</div>
+    <h2>Ils ne travaillent pas seuls</h2>
+    <p>Au WAICF, TwinSense partageait son stand avec tout un réseau de partenaires. Voici la chaîne de valeur :</p>
+
+    <div class="eco-flow">
+      <div class="eco-node">
+        <div class="emoji">📷</div>
+        <div class="name">Prophesee</div>
+        <div class="role">Fabrique la caméra</div>
+      </div>
+      <div class="eco-arrow">→</div>
+      <div class="eco-node">
+        <div class="emoji">🧠</div>
+        <div class="name">TwinSense</div>
+        <div class="role">IA embarquée (SNN)</div>
+      </div>
+      <div class="eco-arrow">→</div>
+      <div class="eco-node">
+        <div class="emoji">🔬</div>
+        <div class="name">IMRA Europe</div>
+        <div class="role">R&D automobile</div>
+      </div>
+      <div class="eco-arrow">→</div>
+      <div class="eco-node">
+        <div class="emoji">🏭</div>
+        <div class="name">AISIN</div>
+        <div class="role">Industrialisation</div>
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon blue">🏢</div>
+        <h4>AISIN Corporation</h4>
+        <p>3ème équipementier automobile mondial (~100 000 employés), lié à Toyota. <strong>C'est AISIN qui finance la recherche robotique de TwinSense.</strong></p>
+      </div>
+      <div class="card">
+        <div class="card-icon orange">🔬</div>
+        <h4>IMRA Europe</h4>
+        <p>Labo de recherche d'AISIN à Sophia Antipolis (Nice). Travaille sur les mêmes thématiques avec des applications automobile.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">🧬</div>
+        <h4>Durance (CNRS)</h4>
+        <p>Spin-off Univ. Côte d'Azur. Partenariat annoncé la veille du WAICF. Leur puce RIVER a déjà été testée dans l'espace par l'ESA.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">📷</div>
+        <h4>Prophesee</h4>
+        <p>Startup française (Paris) qui fabrique les caméras événementielles. Le fondateur de TwinSense était leur ancien représentant au Japon.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon orange">🎓</div>
+        <h4>Univ. de Chiba</h4>
+        <p>Université japonaise partenaire de recherche, située près de Tokyo.</p>
+      </div>
+    </div>
+
+    <div class="callout blue">
+      <strong>Point clé :</strong> TwinSense est indépendant d'AISIN, mais AISIN les finance pour la recherche en robotique. Quand le 3ème équipementier mondial investit dans votre techno, c'est que le potentiel est réel.
+    </div>
+  </div>
+</section>
+
+<!-- ============ LE PROBLÈME ============ -->
+<section>
+  <div class="container">
+    <div class="section-label">03 — Le problème</div>
+    <h2>Pourquoi les robots actuels consomment trop</h2>
+
+    <p>Aujourd'hui, pour qu'un robot se déplace et évite les obstacles, il a besoin de caméras classiques couplées à des processeurs puissants (GPU). Rien que pour la vision : <strong>30 à 40 watts</strong>.</p>
+
+    <p>Les conséquences sont concrètes : la batterie se vide rapidement, il faut recharger souvent, le processeur chauffe (donc ventilateur, bruit, usure), et souvent les données doivent transiter par le cloud.</p>
+
+    <h3>La comparaison</h3>
+
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Critère</th>
+          <th class="old">Système classique</th>
+          <th class="new">TwinSense</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Consommation</td><td>30 – 40 W</td><td><strong>1 W</strong> (objectif)</td></tr>
+        <tr><td>Traitement</td><td>GPU puissant et coûteux</td><td>Puce ASIC de 4 mm²</td></tr>
+        <tr><td>Chaleur</td><td>Ventilateur nécessaire</td><td>Pas de ventilateur</td></tr>
+        <tr><td>Cloud</td><td>Souvent nécessaire</td><td>Tout en local (edge)</td></tr>
+        <tr><td>Batterie</td><td>Se vide vite</td><td>Dure bien plus longtemps</td></tr>
+        <tr><td>Obscurité</td><td>Fonctionne mal</td><td>Dès 3–4 lux</td></tr>
+        <tr><td>Vibrations</td><td>Image floue</td><td>Aucun problème</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ COMMENT ÇA MARCHE ============ -->
+<section>
+  <div class="container">
+    <div class="section-label">04 — Technologie</div>
+    <h2>Comment ça marche, simplement</h2>
+
+    <h3>La caméra événementielle — ne voir que ce qui bouge</h3>
+    <p>Une caméra classique prend 30 photos complètes par seconde, même quand rien ne bouge. C'est comme un professeur qui ferait l'appel de tous ses élèves chaque seconde, même ceux qui n'ont pas bougé.</p>
+
+    <p>La caméra événementielle (« event camera ») fonctionne autrement : <strong>chaque pixel est indépendant et ne réagit que quand la lumière change à son endroit.</strong> C'est comme si chaque élève levait la main uniquement quand il bouge.</p>
+
+    <div class="callout green">
+      <strong>Résultat :</strong> 10 à 1000× moins de données, réaction en microsecondes (vs millisecondes), fonctionne du noir quasi-total au plein soleil. La caméra utilisée est fabriquée par <strong>Prophesee</strong>, startup française.
+    </div>
+
+    <h3>Le SNN — un cerveau qui pense par impulsions</h3>
+    <p>Les réseaux d'IA classiques (CNN) traitent en permanence d'énormes quantités de données, même quand rien d'intéressant ne se passe. Le <strong>SNN</strong> (Spiking Neural Network), lui, fonctionne comme un vrai cerveau : ses neurones ne s'activent que lorsqu'ils reçoivent un signal suffisant. Le reste du temps, ils sont silencieux.</p>
+
+    <p>L'association est naturelle : la caméra n'envoie que les changements, et le SNN ne traite que ces changements. Aucune énergie n'est gaspillée.</p>
+
+    <div class="callout">
+      <strong>Citation de B. Schmitt :</strong> « C'est là qu'on retrouve l'économie dans le modèle SNN : il n'analyse que les spikes [envoyés par la caméra]. Il ne se perd pas dans les calculs potentiellement inutiles. »
+    </div>
+  </div>
+</section>
+
+<!-- ============ LES PROJETS ============ -->
+<section>
+  <div class="container">
+    <div class="section-label">05 — Projets</div>
+    <h2>Ce qui était présenté au WAICF</h2>
+
+    <div class="card-grid" style="grid-template-columns: 1fr 1fr;">
+      <div class="card">
+        <div class="card-icon blue">👁️</div>
+        <h4>Caméra stéréo intelligente</h4>
+        <p>Deux caméras neuromorphiques côte à côte (comme nos deux yeux), avec l'IA embarquée directement dedans. Perçoit la profondeur, analyse en temps réel, fonctionne 100% en local. C'est le produit cible.</p>
+        <p style="margin-top: 0.8rem"><strong>Applications :</strong> robotique, industrie, surveillance, Société 5.0, automobile…</p>
+      </div>
+      <div class="card">
+        <div class="card-icon orange">🤖</div>
+        <h4>Navigation robotique</h4>
+        <p>Un robot qui utilise la caméra événementielle pour naviguer. La démo montrait la différence : image stable malgré les vibrations, là où une caméra RGB classique produit du flou.</p>
+        <p style="margin-top: 0.8rem"><strong>Le plus :</strong> le robot distingue les obstacles poussables (carton, chaise) de ceux à contourner (mur, pilier) grâce à un capteur de contact.</p>
+      </div>
+    </div>
+
+    <div class="callout blue">
+      <strong>Objectif final :</strong> faire tenir tout le système vision + IA sur une seule puce ASIC de 4 mm² — la taille d'un petit ongle. C'est ce qui permettrait de passer du prototype au produit commercial.
+    </div>
+  </div>
+</section>
+
+<!-- ============ POURQUOI C'EST INTÉRESSANT ============ -->
+<section>
+  <div class="container">
+    <div class="section-label">06 — Enjeux</div>
+    <h2>Pourquoi c'est intéressant</h2>
+
+    <h3>Pour l'industrie</h3>
+    <p>Un robot qui consomme 1W au lieu de 40W pour sa vision travaille beaucoup plus longtemps sur batterie. Moins de recharges, moins de refroidissement, pas de cloud = économies sur toute la chaîne. Et ça fonctionne dans le noir et sous vibrations — idéal pour les environnements industriels difficiles.</p>
+
+    <h3>Pour le monde de l'IA</h3>
+    <p>TwinSense illustre ce que certains appellent la <strong>« 3ème vague de l'IA »</strong> : après les CNN et les grands modèles de langage (GPT…), l'avenir pourrait être aux réseaux neuromorphiques (SNN) pour l'IA embarquée. L'enjeu n'est plus d'être toujours plus puissant, mais d'être intelligent avec très peu d'énergie.</p>
+
+    <h3>L'écosystème franco-japonais</h3>
+    <p>Un bel exemple de collaboration : une startup japonaise fondée par un Français, utilisant des caméras françaises (Prophesee), avec un labo à Sophia Antipolis (IMRA), un spin-off du CNRS (Durance), financée par un géant japonais (AISIN/Toyota). Le tout présenté à Cannes.</p>
+
+    <h3>Les défis</h3>
+    <p>Benjamin Schmitt est transparent : la principale difficulté, c'est le financement. <em>« Au niveau académique et technologique, ça marche, pas de problème. Ce qui coince, c'est l'argent »</em>, car le marché n'existe pas encore. C'est le paradoxe de l'innovation de rupture : trop nouveau pour rassurer, mais potentiellement révolutionnaire.</p>
+  </div>
+</section>
+
+<!-- ============ INTERVIEW ============ -->
+<section>
+  <div class="container">
+    <div class="section-label">07 — Transcription</div>
+    <h2>L'interview complète</h2>
+    <p>Réalisée le 13 février 2026 au stand TwinSense / IMRA / AISIN, Riviera 7 Level 0, WAICF 2026. Transcription corrigée et structurée.</p>
+
+    <h3>Présentation</h3>
+    <div class="interview">
+      <div class="interview-block">
+        <div class="speaker adriano">Adriano</div>
+        <div class="quote">Je vais utiliser cette petite application qu'on a codée avec mon patron, c'est juste pour de la prise de notes et de la transcription. Vous inquiétez pas, je ne diffuse rien. L'entreprise à laquelle je parle, c'est laquelle finalement ?</div>
+      </div>
+      <div class="interview-block">
+        <div class="speaker bs">Benjamin Schmitt — CTO</div>
+        <div class="quote bs-quote">TwinSense. C'est une startup qui a été fondée il y a un an à peu près, par trois personnes dont moi-même. On est à Tokyo, le siège social est à Tokyo, et les collègues sont japonais.</div>
+      </div>
+      <div class="interview-block">
+        <div class="speaker adriano">Adriano</div>
+        <div class="quote">Vous parlez japonais vous-même ?</div>
+      </div>
+      <div class="interview-block">
+        <div class="speaker bs">B.S.</div>
+        <div class="quote bs-quote">J'y suis depuis 25 ans.</div>
+      </div>
+    </div>
+
+    <div class="interview-divider">• • •</div>
+
+    <h3>Relations avec AISIN et IMRA</h3>
+    <div class="interview">
+      <div class="interview-block">
+        <div class="speaker bs">B.S.</div>
+        <div class="quote bs-quote">On travaille directement avec AISIN, qui est un énorme groupe japonais. AISIN travaille avec TwinSense et aussi avec IMRA à Nice, qui est un centre de recherche. Et complètement à droite [sur le stand], c'est l'Université de Chiba, à Tokyo.</div>
+      </div>
+      <div class="interview-block">
+        <div class="speaker adriano">Adriano</div>
+        <div class="quote">Et vous êtes indépendants d'AISIN ?</div>
+      </div>
+      <div class="interview-block">
+        <div class="speaker bs">B.S.</div>
+        <div class="quote bs-quote">Oui, on est indépendant complètement d'AISIN.</div>
+      </div>
+    </div>
+
+    <div class="interview-divider">• • •</div>
+
+    <h3>Le projet et les objectifs</h3>
+    <div class="interview">
+      <div class="interview-block">
+        <div class="speaker adriano">Adriano</div>
+        <div class="quote">Vos objectifs, ce serait quoi ?</div>
+      </div>
+      <div class="interview-block">
+        <div class="speaker bs">B.S.</div>
+        <div class="quote bs-quote">Notre but produit fini, on veut descendre la consommation électrique. Pour l'instant on est dans une phase plus de recherche et d'exploration. Le premier produit idéal, c'est une caméra stéréo avec deux caméras neuromorphiques, avec une capacité d'IA à l'intérieur, avec l'image de la profondeur, de l'optique, différentes choses. En ayant une caméra comme ça indépendante, on peut l'adapter pour l'industrie, des applications industrielles, pour la Société 5.0, pour la surveillance. Il y a énormément de domaines.</div>
+      </div>
+    </div>
+
+    <div class="interview-divider">• • •</div>
+
+    <h3>Pourquoi la robotique</h3>
+    <div class="interview">
+      <div class="interview-block">
+        <div class="speaker bs">B.S.</div>
+        <div class="quote bs-quote">Là, dans la démo de ce stand, on a choisi la robotique parce qu'AISIN est très intéressé par la robotique. Pour l'instant on est trois ingénieurs, on ne peut pas tout couvrir. AISIN nous paye pour faire de la recherche dans ce domaine. C'est le domaine vers lequel on s'oriente, mais ça s'applique à n'importe quel domaine.</div>
+      </div>
+    </div>
+
+    <div class="interview-divider">• • •</div>
+
+    <h3>La caméra et le SNN</h3>
+    <div class="interview">
+      <div class="interview-block">
+        <div class="speaker adriano">Adriano</div>
+        <div class="quote">C'est un système de caméra qui surveille les événements, qui envoie un spike ?</div>
+      </div>
+      <div class="interview-block">
+        <div class="speaker bs">B.S.</div>
+        <div class="quote bs-quote">Exactement, c'est une event camera, c'est un synonyme. Cette caméra, c'est une compagnie française qui la produit, qui s'appelle Prophesee. Le SNN, c'est une méthode de réflexion IA, un modèle différent. C'est le nouvel « hype » dans le monde de l'IA : passer du CNN, qui est une ancienne architecture très bien, très polyvalente, mais lourde, au SNN qui fonctionne avec des spikes.</div>
+      </div>
+    </div>
+
+    <div class="interview-divider">• • •</div>
+
+    <h3>L'impact chiffré</h3>
+    <div class="interview">
+      <div class="interview-block">
+        <div class="speaker adriano">Adriano</div>
+        <div class="quote">Concrètement, niveau chiffres, ça donne quoi ?</div>
+      </div>
+      <div class="interview-block">
+        <div class="speaker bs">B.S.</div>
+        <div class="quote bs-quote">Un robot pour naviguer dans une pièce, c'est entre 30 et 40 watts. Nous, l'objectif c'est de descendre à 1 watt, en faisant un chip ASIC. L'impact, c'est la durabilité de la batterie : moins de charge, moins de coûts pour recharger. Et puis on peut faire tous les calculs sur place, en edge. On n'a pas besoin d'envoyer les données dans le cloud. Ça fait diminution du trafic de données, pas de stockage. Tout se fait entièrement en local.</div>
+      </div>
+      <div class="interview-block">
+        <div class="speaker adriano">Adriano</div>
+        <div class="quote">Sur une puce de quelle taille ?</div>
+      </div>
+      <div class="interview-block">
+        <div class="speaker bs">B.S.</div>
+        <div class="quote bs-quote">On vise 4 mm².</div>
+      </div>
+    </div>
+
+    <div class="interview-divider">• • •</div>
+
+    <h3>Les difficultés</h3>
+    <div class="interview">
+      <div class="interview-block">
+        <div class="speaker adriano">Adriano</div>
+        <div class="quote">Les difficultés que vous rencontrez, ce serait quoi ?</div>
+      </div>
+      <div class="interview-block">
+        <div class="speaker bs">B.S.</div>
+        <div class="quote bs-quote">Ça avance très bien. On a des résultats très intéressants. Au niveau académique et technologique, ça marche, pas de problème. Ce qui coince, c'est l'argent. Parce que c'est un marché qui n'existe pas encore. On n'a pas l'application pile dessus où on va pouvoir sortir les chiffres de revenu. Donc pour les investisseurs, c'est un petit peu compliqué.</div>
+      </div>
+    </div>
+
+    <div class="interview-divider">• • •</div>
+
+    <h3>Performances de la caméra</h3>
+    <div class="interview">
+      <div class="interview-block">
+        <div class="speaker adriano">Adriano</div>
+        <div class="quote">Exposition au soleil, noir complet, ça ne gêne pas la caméra ?</div>
+      </div>
+      <div class="interview-block">
+        <div class="speaker bs">B.S.</div>
+        <div class="quote bs-quote">Pas tant que ça. Moins qu'une caméra normale. Entre 3 et 4 lux, on peut s'en sortir. Et les vibrations, aucun problème pour cette caméra. Vous voyez là [montrant l'écran], avec une caméra normale, ça bouge, il y a toutes les vibrations. Là avec la caméra événementielle, c'est stable.</div>
+      </div>
+      <div class="interview-block">
+        <div class="speaker adriano">Adriano</div>
+        <div class="quote">Le SNN n'analyse que les spikes envoyés par la caméra, c'est ça ?</div>
+      </div>
+      <div class="interview-block">
+        <div class="speaker bs">B.S.</div>
+        <div class="quote bs-quote">Exactement. C'est là qu'on retrouve l'économie : il n'analyse que ça. Il ne se perd pas dans les calculs potentiellement inutiles.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="container">
+    Rédigé par Adriano — Février 2026 — WAICF, Palais des Festivals, Cannes<br>
+    <a href="https://twinsense.ai" target="_blank">twinsense.ai</a>
+  </div>
+</footer>
+
+</body>
+</html>
